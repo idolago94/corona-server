@@ -6,6 +6,12 @@ const ReportSchema = new Schema({
    from: Date,
    to: Date,
    reportDate: Date
+}, {
+   writeConcern: {
+      w: 'majority',
+      j: true,
+      wtimeout: 1000
+    }
 });
 const Report = mongoose.model('Reports', ReportSchema);
 
