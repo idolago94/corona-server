@@ -4,18 +4,21 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
 const reportRouter = require('./routes/reports');
 
 var app = express();
 
-mongoose.connect(`mongodb://localhost/coronaDB`);
+mongoose.connect(`mongodb://localhost/coronaDB3`);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
