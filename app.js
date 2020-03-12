@@ -11,7 +11,7 @@ const reportRouter = require('./routes/reports');
 var app = express();
 
 // mongoose.connect(`mongodb://localhost/coronaDB3`);
-mongoose.connect('mongodb+srv://admin:admin@cluster0-2xv6n.gcp.mongodb.net/test?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://admin:admin@cluster0-2xv6n.gcp.mongodb.net/test?retryWrites=true&w=majority/coronaDB');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
