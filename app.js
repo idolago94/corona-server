@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 const reportRouter = require('./routes/reports');
+const MongoClient = require('mongodb').MongoClient;
 
 var app = express();
 
@@ -18,12 +19,13 @@ var app = express();
 //     console.log('Connection Response: ', res);
 //   }
 // });
-mongoose.connect('mongodb://heroku_85c18gkw:ido1994@ds259250.mlab.com:59250/heroku_85c18gkw', (err, res) => {
-  if(err) {
-    console.log('Connection Error: ', err);
-  } else {
-    console.log('Connection Response: ', res);
-  }
+
+MongoClient.connect('mongodb://heroku_85c18gkw:ido1994@ds259250.mlab.com:59250/heroku_85c18gkw', function(err, client) {
+  console.log("Connected successfully to server");
+
+  const db = client.db('heroku_85c18gkw');
+
+  client.close();
 });
 
 // view engine setup
