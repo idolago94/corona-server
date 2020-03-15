@@ -11,14 +11,15 @@ const MongoClient = require('mongodb').MongoClient;
 
 var app = express();
 
-console.log('mongor URI: ', process.env.MONGODB_URI)
-MongoClient.connect(process.env.MONGODB_URI, function(err, client) {
-  console.log("Connected successfully to server");
+console.log('mongor URI: ', process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI)
+// MongoClient.connect(process.env.MONGODB_URI, function(err, client) {
+//   console.log("Connected successfully to server");
 
-  const db = client.db('heroku_85c18gkw');
+//   const db = client.db('heroku_85c18gkw');
 
-  client.close();
-});
+//   client.close();
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
