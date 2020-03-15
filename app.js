@@ -11,16 +11,8 @@ const MongoClient = require('mongodb').MongoClient;
 
 var app = express();
 
-// mongoose.connect(`mongodb://localhost/coronaDB3`);
-// mongoose.connect('mongodb+srv://admin:admin@cluster0-2xv6n.gcp.mongodb.net/test?retryWrites=true&w=majority', (err, res) => {
-//   if(err) {
-//     console.log('Connection Error: ', err);
-//   } else {
-//     console.log('Connection Response: ', res);
-//   }
-// });
-
-MongoClient.connect('mongodb://heroku_85c18gkw:ido1994@ds259250.mlab.com:59250/heroku_85c18gkw', function(err, client) {
+console.log('mongor URI: ', process.env.MONGODB_URI)
+MongoClient.connect(process.env.MONGODB_URI, function(err, client) {
   console.log("Connected successfully to server");
 
   const db = client.db('heroku_85c18gkw');
