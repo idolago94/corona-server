@@ -7,19 +7,11 @@ const mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 const reportRouter = require('./routes/reports');
-const MongoClient = require('mongodb').MongoClient;
+const verifyRouter = require('./routes/verify');
 
 var app = express();
 
-console.log('mongor URI: ', process.env.MONGODB_URI);
-mongoose.connect(process.env.MONGODB_URI)
-// MongoClient.connect(process.env.MONGODB_URI, function(err, client) {
-//   console.log("Connected successfully to server");
-
-//   const db = client.db('heroku_85c18gkw');
-
-//   client.close();
-// });
+mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/corona`);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,6 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/reports', reportRouter);
+app.use('/verify', verifyRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
