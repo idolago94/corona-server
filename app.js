@@ -6,7 +6,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var schedule = require('node-schedule');
-const fetch = require('node-fetch');
+const Report = require('./models/Report');
+const NotificationMiddleware = require('./middlewares/Notification');
 
 const reportRouter = require('./routes/reports');
 const verifyRouter = require('./routes/verify');
@@ -25,28 +26,15 @@ mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/corona`);
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-var sendNotification = schedule.scheduleJob(process.env.PUSH_SCHEDULE, function(){
+const sendNotification = schedule.scheduleJob(process.env.PUSH_SCHEDULE || '*/10 * * * * *', async() => {
   console.log('sendNotification');
-  let bodyRequest = {
-    "request": {
-      "application": "4E22D-DBF89", // Pushwoosh application code
-      "auth": "q0d5z9n6GwgI3XaUdwhpxM2poyk700pq1Nxw0DfGMCCLbMHX7dxgadKRDjNDjhUid7RcY45RTBCqClYHH5w1", // API access token from Pushwoosh Control Panel
-      "notifications": [
-        {
-          // Content settings 
-          "send_date": "now",  // required. YYYY-MM-DD HH:mm OR 'now'
-          "ignore_user_timezone": true, // or false, required
-          "content": {  // required, object( language1: 'content1', language2: 'content2' ) OR string. Ignored for Windows 8, use "wns_content" instead. (Use \n for multiline text. Ex: "hello\nfriend")
-            "en": process.env.PUSH_MESSAGE
-          },
-        }
-      ]
-    }
+  let currentDate = new Date();
+  let ONE_HOUR = 60 * 60 * 1000;
+  let newReports = await Report.find({reportDate: {$gte: currentDate - ONE_HOUR}});
+  console.log(newReports.length);
+  if(newReports > 0) {
+    NotificationMiddleware.send();
   }
-  fetch(`https://cp.pushwoosh.com/json/1.3/createMessage`,{
-    method: 'POST',
-    body: JSON.stringify(bodyRequest)
-  }).then(res => res.json()).then(response => console.log('Sendd notification response: ', response));
 });
 
 // view engine setup
